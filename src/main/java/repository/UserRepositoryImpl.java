@@ -24,6 +24,7 @@ public class UserRepositoryImpl implements UserRepository{
     public void addUser(User user) {
         try(Connection connection = ConnectionManager.open();
             PreparedStatement preparedStatement = connection.prepareStatement(CREATE_USER)){
+            connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getEmail());
             preparedStatement.setString(3, user.getCountry());
@@ -39,6 +40,7 @@ public class UserRepositoryImpl implements UserRepository{
         try(Connection connection = ConnectionManager.open();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(FIND_ALL_USERS)) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
@@ -59,6 +61,7 @@ public class UserRepositoryImpl implements UserRepository{
 
         try(Connection connection = ConnectionManager.open();
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER)){
+            connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getEmail());
             preparedStatement.setString(3, user.getCountry());
@@ -75,6 +78,7 @@ public class UserRepositoryImpl implements UserRepository{
         User user = new User();
         try(Connection connection = ConnectionManager.open();
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_USER_BY_ID)) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -95,6 +99,7 @@ public class UserRepositoryImpl implements UserRepository{
     public void deleteUser(int id) {
         try(Connection connection = ConnectionManager.open();
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)){
+            connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         }
