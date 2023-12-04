@@ -1,9 +1,12 @@
 package repository.util;
 
+import lombok.experimental.UtilityClass;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+@UtilityClass
 public class PropertiesUtil {
 
     private static final Properties PROPERTIES = new Properties();
@@ -24,5 +27,5 @@ public class PropertiesUtil {
         }
     }
 
-    private PropertiesUtil(){}
+
 }
